@@ -1,5 +1,8 @@
 package com.example.lababiba.weatherservice.Utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by lexa on 27.04.16.
  */
@@ -50,5 +53,30 @@ public class TextCorrectionUtils {
 
         }
         return weath;
+    }
+
+    public static List<String> getCites(final String responce){
+        List<String> list = new ArrayList<>();
+        int iterator = 0;
+        while (iterator<responce.length()-1)
+        {
+            if(responce.charAt(iterator)=='='){
+                String result = "";
+                int j=iterator+1;
+                for(;j<responce.length();j++){
+                    if(responce.charAt(j)==';') break;
+                    result+=responce.charAt(j);
+                }
+                list.add(result);
+                iterator = j;
+            }
+
+
+            iterator++ ;
+        }
+
+
+
+        return list;
     }
 }

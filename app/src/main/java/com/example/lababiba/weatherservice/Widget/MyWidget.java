@@ -1,6 +1,7 @@
 package com.example.lababiba.weatherservice.Widget;
 
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
@@ -9,12 +10,13 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import com.example.lababiba.weatherservice.Activities.MainActivity;
 import com.example.lababiba.weatherservice.Controller.SharedPresencesController;
 import com.example.lababiba.weatherservice.R;
 import com.example.lababiba.weatherservice.Utils.TextCorrectionUtils;
 
 public class MyWidget extends AppWidgetProvider {
-
+    private static final String ACTION_WIDGET_RECEIVER = "receiverApp";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -29,8 +31,11 @@ public class MyWidget extends AppWidgetProvider {
         Log.e("parse response", "parse");
         remoteViews.setTextViewText(R.id.textView,SharedPresencesController.getInstance().getString("currCity"));
         remoteViews.setTextViewText(R.id.textView2, TextCorrectionUtils.getTemp(response));
-        remoteViews.setTextViewText(R.id.textView3, TextCorrectionUtils.getWeather(response));
-        remoteViews.setImageViewResource(R.id.imageButton, getPicture(TextCorrectionUtils.getWeather(response)));
+
+        remoteViews.setImageViewResource(R.id.imageView2, getPicture(TextCorrectionUtils.getWeather(response)));
+
+
+
 
         for (int i : appWidgetIds)
             appWidgetManager.updateAppWidget(i, remoteViews);
@@ -53,10 +58,16 @@ public class MyWidget extends AppWidgetProvider {
             this.onUpdate(context, gm, ids);
         }
 
+
+
         super.onReceive(context, intent);
     }
 
     private int getPicture(String weather) {
+
+
+
+
 
             switch (weather) {
 
