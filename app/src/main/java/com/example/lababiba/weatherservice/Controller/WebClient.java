@@ -1,45 +1,46 @@
 package com.example.lababiba.weatherservice.Controller;
 
 
-import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.lababiba.weatherservice.Interfaces.IWebService;
 
 import org.ksoap2.SoapEnvelope;
-import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
 
 /**
  * Created by lababiba on 14.04.16.
  */
 public class WebClient implements IWebService {
+    private static volatile WebClient instance;
+
+    public static WebClient getInstance() {
+        WebClient localInstance = instance;
+        if (localInstance == null) {
+            synchronized (WebClient.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new WebClient();
+                }
+            }
+        }
+        return localInstance;
+    }
+
+    private WebClient(){}
+
     private static final String NAMESPACE = "http://Interfaces.Controller/";
     private static String URL="http://178.136.218.195:8080/weather?wsdl";
-    private static final String METHOD_NAME = "getWeather";
-    private static final String SOAP_ACTION =  "getWeather";
+    private static final String METHOD_NAME_WEATHER = "getWeather";
+    private static final String SOAP_ACTION_WEATHER =  "getWeather";
+    private static final String METHOD_NAME_CITIES = "getCites";
+    private static final String SOAP_ACTION_CITIES = "getCites";
 
-    public static Context c;
 
 
-    private final SoapSerializationEnvelope getSoapSerializationEnvelope(SoapObject request) {
-        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-        envelope.dotNet = false;
-        envelope.implicitTypes = true;
-        envelope.setAddAdornments(false);
-        envelope.setOutputSoapObject(request);
-
-        return envelope;
-    }
 
 
 
@@ -47,23 +48,21 @@ public class WebClient implements IWebService {
 
 
     @Override
-    public String[] getWeather(String city) {
+    public String[] getWeather(final String city) {
         {
-            SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
-
-
-            PropertyInfo propInfo = new PropertyInfo();
+            final SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME_WEATHER);
+            final PropertyInfo propInfo = new PropertyInfo();
             propInfo.name = "arg0";
             propInfo.type = PropertyInfo.STRING_CLASS;
             request.addProperty("arg0", city);
-            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+            final SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
             envelope.setOutputSoapObject(request);
-            HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+            final HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
             try {
-                androidHttpTransport.call(SOAP_ACTION, envelope);
+                androidHttpTransport.call(SOAP_ACTION_WEATHER, envelope);
+                envelope.setOutputSoapObject(request);
 
-
-                Log.e("casc",envelope.getResult().toString());
+                Log.e("getWeather",envelope.getResponse().toString());
                 return new String[]{envelope.getResponse().toString()};
             } catch (Exception soapFault) {
                 soapFault.printStackTrace();
@@ -74,23 +73,29 @@ public class WebClient implements IWebService {
         }
         return null;
     }
+
     @Override
     public String[] getCites() {
-        return new String[0];
-    }
+        {
+            final SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME_CITIES);
+            final SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+            envelope.setOutputSoapObject(request);
+            final HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+            try {
+                androidHttpTransport.call(SOAP_ACTION_CITIES, envelope);
+                envelope.setOutputSoapObject(request);
+
+                Log.e("getCities",envelope.getResult().toString());
+                return new String[]{envelope.getResponse().toString()};
+            } catch (Exception soapFault) {
+                soapFault.printStackTrace();
+            }
 
 
 
-    public static class getWeatherTask extends AsyncTask<String,Void,String[]>
-    {
-
-
-        @Override
-        protected String[] doInBackground(String... params) {
-           String[] weather = new WebClient().getWeather(params[0]);
-
-           return weather;
         }
-
+        return null;
     }
+
+
 }

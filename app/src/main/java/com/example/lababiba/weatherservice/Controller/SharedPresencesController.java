@@ -1,34 +1,35 @@
 package com.example.lababiba.weatherservice.Controller;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
  * Created by Администратор on 25.04.2016.
  */
-public class SharedPrefencesController {
-    static private SharedPrefencesController instance;
+public class SharedPresencesController {
 
-    public static SharedPrefencesController getInstance() {
+    private static volatile SharedPresencesController instance;
 
-        if (instance == null) {
-            synchronized (SharedPrefencesController.class) {
-                instance = new SharedPrefencesController();
+    public static SharedPresencesController getInstance() {
+        SharedPresencesController localInstance = instance;
+        if (localInstance == null) {
+            synchronized (SharedPresencesController.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new SharedPresencesController();
+                }
             }
         }
-        return instance;
-
+        return localInstance;
     }
 
-    private Context context ;
-    private String username = "Qwer";
+
+
+
     private SharedPreferences preferences;
 
     public void init(Context context) {
-        this.context = context;
-
-        preferences = context.getSharedPreferences(username, Context.MODE_PRIVATE);
+        preferences = context.getSharedPreferences("defaultUser", Context.MODE_PRIVATE);
     }
 
     public String getString(String prefKey) {

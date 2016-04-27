@@ -10,7 +10,7 @@
     tools:context=".Activities.MainActivity">
 
     <Button
-        android:onClick="onClickStartButton"
+
         android:id="@+id/start"
         android:layout_height="wrap_content"
         android:text="Start!"

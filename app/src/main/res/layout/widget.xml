@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Одесса"
+
             android:id="@+id/textView"
             android:layout_marginLeft="20dp" />
 
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="20 °С"
+
             android:id="@+id/textView2"
             android:layout_marginLeft="30dp" />
 
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="солнечно"
+
             android:id="@+id/textView3"
             android:layout_marginLeft="20dp" />
 

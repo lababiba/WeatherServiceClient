@@ -1,20 +1,22 @@
 package com.example.lababiba.weatherservice.Service;
 
 import android.app.Service;
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.widget.Toast;
+import android.util.Log;
 
-import com.example.lababiba.weatherservice.Controller.SharedPrefencesController;
+import com.example.lababiba.weatherservice.Controller.SharedPresencesController;
 import com.example.lababiba.weatherservice.Controller.WebClient;
 
 /**
  * Created by lababiba on 14.04.16.
  */
 public class MyService extends Service {
-    String city;
+
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -23,7 +25,6 @@ public class MyService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        city = intent.getStringExtra("city");
         ServiceTask();
         return super.onStartCommand(intent, flags, startId);
     }
@@ -34,18 +35,21 @@ public class MyService extends Service {
             @Override
             public void run() {
                 while (true){
-                    if(city!=null) {
-                        WebClient webClient = new WebClient();
-                        SharedPrefencesController.getInstance().init(context);
-                        SharedPrefencesController.getInstance().putString("Weather",
-                                webClient.getWeather(city)[0]);
-                    }
+                        final WebClient webClient = WebClient.getInstance();
 
+                        SharedPresencesController.getInstance().init(context);
+                        SharedPresencesController.getInstance().putString("currWeatherResponse",
+                                webClient.getWeather(SharedPresencesController.getInstance().getString("currCity"))[0]);
 
+                        Intent intent = new Intent();
+                        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+                        context.sendBroadcast(intent);
+
+                    Log.e("Service Running", "Thread Sleep");
                     try {
                      Thread.sleep(3600000);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        Log.e("Thread","Thread HALT");
                     }
 
 
