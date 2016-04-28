@@ -10,7 +10,7 @@
     android:layout_centerVertical="true"
     android:padding="5dp"
     android:text="TextView"
-    android:textColor="@color/colorPrimaryDark"
+    android:textColor="@color/aluminum"
     android:textSize="22sp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 </TextView>

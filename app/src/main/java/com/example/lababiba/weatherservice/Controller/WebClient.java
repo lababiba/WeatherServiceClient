@@ -33,7 +33,7 @@ public class WebClient implements IWebService {
     private WebClient(){}
 
     private static final String NAMESPACE = "http://Interfaces.Controller/";
-    private static String URL="http://178.136.218.195:8080/weather?wsdl";
+    private static String URL="http://192.168.0.102:8080/weather?wsdl";
     private static final String METHOD_NAME_WEATHER = "getWeather";
     private static final String SOAP_ACTION_WEATHER =  "getWeather";
     private static final String METHOD_NAME_CITIES = "getCites";
